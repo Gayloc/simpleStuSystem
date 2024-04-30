@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.AbstractTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileWriter;
@@ -18,20 +19,57 @@ public class MainWindow {
     private JTable PStuTable;
     private static final UStudentModel uStudentModel = new UStudentModel(new UStudent[0]);
     private static final PStudentModel pStudentModel = new PStudentModel(new PStudent[0]);
+    private static JMenuItem itemAddUStudent;
+    private static JMenuItem itemAddPStudent;
+    public static final int windowWidth = 800;
+    public static final int windowHeight = 600;
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("MainWindow");
+        JFrame frame = new JFrame("学生信息管理系统");
 
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
 
-        JMenu fileMenu = getFileMenu(frame);
-        menuBar.add(fileMenu);
+        menuBar.add(getFileMenu(frame));
+        menuBar.add(getEditMenu(frame));
 
-        frame.setSize(800, 600);
+        Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) screensize.getWidth() / 2 - windowWidth/2;
+        int y = (int) screensize.getHeight() / 2 - windowHeight/2;
+        frame.setLocation(x, y);
+
+        frame.setSize(windowWidth, windowHeight);
         frame.setContentPane(new MainWindow().mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+    }
+
+    private static JMenu getEditMenu(JFrame frame) {
+        JMenu editMenu = new JMenu("编辑");
+        JMenu addMenu = new JMenu("添加");
+
+        itemAddUStudent = new JMenuItem(new AbstractAction("本科生") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AddUStudent.show(c);
+                uStudentModel.setUStudents(c.getUStudent());
+            }
+        });
+        itemAddUStudent.setEnabled(false);
+
+        itemAddPStudent = new JMenuItem(new AbstractAction("研究生") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AddPStudent.show(c);
+                pStudentModel.setPStudents(c.getPStudent());
+            }
+        });
+        itemAddPStudent.setEnabled(false);
+
+        addMenu.add(itemAddUStudent);
+        addMenu.add(itemAddPStudent);
+        editMenu.add(addMenu);
+        return editMenu;
     }
 
     private static JMenu getFileMenu(JFrame frame) {
@@ -67,6 +105,8 @@ public class MainWindow {
                     if (file.getName().endsWith(".xml")) {
                         c = new Controller(file);
                         itemSave.setEnabled(true);
+                        itemAddUStudent.setEnabled(true);
+                        itemAddPStudent.setEnabled(true);
                     } else {
                         JOptionPane.showMessageDialog(frame,"文件格式不正确", "错误", JOptionPane.ERROR_MESSAGE);
                     }
@@ -90,6 +130,8 @@ public class MainWindow {
                         uStudentModel.setUStudents(c.getUStudent());
                         pStudentModel.setPStudents(c.getPStudent());
                         itemSave.setEnabled(true);
+                        itemAddUStudent.setEnabled(true);
+                        itemAddPStudent.setEnabled(true);
                     } else {
                         JOptionPane.showMessageDialog(frame,"文件格式不正确", "错误", JOptionPane.ERROR_MESSAGE);
                     }
