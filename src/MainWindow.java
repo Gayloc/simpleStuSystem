@@ -1,8 +1,10 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,8 +23,11 @@ public class MainWindow {
     private static final PStudentModel pStudentModel = new PStudentModel(new PStudent[0]);
     private static JMenuItem itemAddUStudent;
     private static JMenuItem itemAddPStudent;
+    private static JMenuItem itemDelete;
     public static final int windowWidth = 800;
     public static final int windowHeight = 600;
+    private static int tabIndex = 0;
+    private static int selectedRow = -1;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("学生信息管理系统");
@@ -48,11 +53,34 @@ public class MainWindow {
         JMenu editMenu = new JMenu("编辑");
         JMenu addMenu = new JMenu("添加");
 
+        itemDelete = new JMenuItem(new AbstractAction("删除选中项") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectedRow != -1) {
+                    if (tabIndex == 0) {
+                        if(JOptionPane.showConfirmDialog(frame,"确定删除？","删除确定", JOptionPane.YES_NO_OPTION)==0) {
+                            c.removeUStudent(c.getUStudent()[selectedRow].getId());
+                            uStudentModel.setUStudents(c.getUStudent());
+                        }
+                    } else if (tabIndex == 1) {
+                        if(JOptionPane.showConfirmDialog(frame,"确定删除？","删除确定", JOptionPane.YES_NO_OPTION)==0) {
+                            c.removePStudent(c.getPStudent()[selectedRow].getId());
+                            pStudentModel.setPStudents(c.getPStudent());
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame, "没有选中项", "删除失败", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        itemDelete.setEnabled(false);
+
         itemAddUStudent = new JMenuItem(new AbstractAction("本科生") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddUStudent.show(c);
                 uStudentModel.setUStudents(c.getUStudent());
+                JOptionPane.showMessageDialog(frame,"添加成功");
             }
         });
         itemAddUStudent.setEnabled(false);
@@ -62,6 +90,7 @@ public class MainWindow {
             public void actionPerformed(ActionEvent e) {
                 AddPStudent.show(c);
                 pStudentModel.setPStudents(c.getPStudent());
+                JOptionPane.showMessageDialog(frame,"添加成功");
             }
         });
         itemAddPStudent.setEnabled(false);
@@ -69,6 +98,7 @@ public class MainWindow {
         addMenu.add(itemAddUStudent);
         addMenu.add(itemAddPStudent);
         editMenu.add(addMenu);
+        editMenu.add(itemDelete);
         return editMenu;
     }
 
@@ -107,6 +137,7 @@ public class MainWindow {
                         itemSave.setEnabled(true);
                         itemAddUStudent.setEnabled(true);
                         itemAddPStudent.setEnabled(true);
+                        itemDelete.setEnabled(true);
                     } else {
                         JOptionPane.showMessageDialog(frame,"文件格式不正确", "错误", JOptionPane.ERROR_MESSAGE);
                     }
@@ -132,6 +163,7 @@ public class MainWindow {
                         itemSave.setEnabled(true);
                         itemAddUStudent.setEnabled(true);
                         itemAddPStudent.setEnabled(true);
+                        itemDelete.setEnabled(true);
                     } else {
                         JOptionPane.showMessageDialog(frame,"文件格式不正确", "错误", JOptionPane.ERROR_MESSAGE);
                     }
@@ -156,8 +188,78 @@ public class MainWindow {
     private void createUIComponents() {
         UStuTable = new JTable();
         UStuTable.setModel(uStudentModel);
+        UStuTable.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2) {
+                    int row = UStuTable.getSelectedRow();
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                selectedRow = UStuTable.getSelectedRow();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
         PStuTable = new JTable();
         PStuTable.setModel(pStudentModel);
+        PStuTable.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2) {
+                    int row = PStuTable.getSelectedRow();
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                selectedRow = PStuTable.getSelectedRow();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        tabbedPane = new JTabbedPane();
+        tabbedPane.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                tabIndex = tabbedPane.getSelectedIndex();
+                if(tabIndex == 0) {
+                    selectedRow = UStuTable.getSelectedRow();
+                } else {
+                    selectedRow = PStuTable.getSelectedRow();
+                }
+            }
+        });
     }
 }
 
