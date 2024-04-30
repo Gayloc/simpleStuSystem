@@ -67,8 +67,14 @@ public class Controller implements SISystem {
 
         Element gradesElement = document.createElement("grades");
         u.getGrades().forEach((key, value)->{
-            Element gradeElement = document.createElement(key);
-            gradeElement.setAttribute("grade", value.toString());
+            Element subject = document.createElement("subject");
+            Element grade = document.createElement("grade");
+            Element gradeName = document.createElement("gradeName");
+            gradeName.setTextContent(key);
+            grade.setTextContent(String.valueOf(value));
+            subject.appendChild(gradeName);
+            subject.appendChild(grade);
+            gradesElement.appendChild(subject);
         });
         studentElement.appendChild(gradesElement);
         if(root.getElementsByTagName("UStudent").item(0)==null) {
@@ -96,8 +102,14 @@ public class Controller implements SISystem {
 
         Element gradesElement = document.createElement("grades");
         p.getGrades().forEach((key, value)->{
-            Element gradeElement = document.createElement(key);
-            gradeElement.setAttribute("grade", value.toString());
+            Element subject = document.createElement("subject");
+            Element grade = document.createElement("grade");
+            Element gradeName = document.createElement("gradeName");
+            gradeName.setTextContent(key);
+            grade.setTextContent(String.valueOf(value));
+            subject.appendChild(gradeName);
+            subject.appendChild(grade);
+            gradesElement.appendChild(subject);
         });
         studentElement.appendChild(gradesElement);
 
@@ -319,9 +331,10 @@ public class Controller implements SISystem {
     private UStudent nodeToUStudent(Node node) {
         Node gradesNode = node.getChildNodes().item(0);
         HashMap<String, Integer> grades = new HashMap<>();
+
         for(int i=0; i<gradesNode.getChildNodes().getLength(); i++) {
             Element gradeElement = (Element) gradesNode.getChildNodes().item(i);
-            grades.put(gradeElement.getTagName(), Integer.valueOf(gradeElement.getAttribute("grade")));
+            grades.put(gradeElement.getChildNodes().item(0).getTextContent(), Integer.valueOf(gradeElement.getChildNodes().item(1).getTextContent()));
         }
 
         return new UStudent(
@@ -345,7 +358,7 @@ public class Controller implements SISystem {
         HashMap<String, Integer> grades = new HashMap<>();
         for(int i=0; i<gradesNode.getChildNodes().getLength(); i++) {
             Element gradeElement = (Element) gradesNode.getChildNodes().item(i);
-            grades.put(gradeElement.getTagName(), Integer.valueOf(gradeElement.getAttribute("grade")));
+            grades.put(gradeElement.getChildNodes().item(0).getTextContent(), Integer.valueOf(gradeElement.getChildNodes().item(1).getTextContent()));
         }
 
         return new PStudent(

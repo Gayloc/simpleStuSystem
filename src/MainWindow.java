@@ -188,7 +188,7 @@ class UStudentModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return uStudents.length;
+        return uStudents!=null?uStudents.length:0;
     }
 
     @Override
@@ -267,7 +267,7 @@ class PStudentModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return pStudents.length;
+        return pStudents!=null?pStudents.length:0;
     }
 
     @Override
