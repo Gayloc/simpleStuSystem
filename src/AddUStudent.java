@@ -63,7 +63,7 @@ public class AddUStudent extends JDialog {
         if(!NewGrade.getText().isEmpty()) {
             String[] Grades = NewGrade.getText().split(";");
             for (String s : Grades) {
-                String[] arr = s.split(",");
+                String[] arr = s.split(":");
                 if (arr.length != 2) {
                     JOptionPane.showMessageDialog(this, "分数格式不正确");
                     break;
