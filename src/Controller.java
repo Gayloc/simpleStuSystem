@@ -147,63 +147,14 @@ public class Controller implements SISystem {
 
     @Override
     public void putStudent(int id, UStudent u) {
-        Node ustudents = root.getElementsByTagName("UStudent").item(0);
-        for(int i=0; i<ustudents.getChildNodes().getLength(); i++) {
-            if(ustudents.getChildNodes().item(i).getAttributes().getNamedItem("id").getTextContent().equals(String.valueOf(id))){
-                ustudents.getChildNodes().item(i).removeChild(ustudents.getChildNodes().item(i));
-
-                Element studentElement = document.createElement("student");
-                studentElement.setAttribute("name", u.getName());
-                studentElement.setAttribute("age", String.valueOf(u.getAge()));
-                studentElement.setAttribute("major", u.getMajor());
-                studentElement.setAttribute("street", u.getAddress().getStreet());
-                studentElement.setAttribute("city", u.getAddress().getCity());
-                studentElement.setAttribute("state", u.getAddress().getState());
-                studentElement.setAttribute("zip", u.getAddress().getZip());
-                studentElement.setAttribute("id", String.valueOf(u.getId()));
-                studentElement.setAttribute("cls", u.getCls());
-
-                Element gradesElement = document.createElement("grades");
-                u.getGrades().forEach((key, value)->{
-                    Element gradeElement = document.createElement(key);
-                    gradeElement.setAttribute("grade", value.toString());
-                });
-                studentElement.appendChild(gradesElement);
-
-                ustudents.getChildNodes().item(i).appendChild(studentElement);
-            }
-        }
+        this.removeUStudent(id);
+        this.addStudent(u);
     }
 
     @Override
     public void putStudent(int id, PStudent p) {
-        Node pstudents = root.getElementsByTagName("UStudent").item(0);
-        for(int i = 0; i< pstudents.getChildNodes().getLength(); i++) {
-            if(pstudents.getChildNodes().item(i).getAttributes().getNamedItem("id").getTextContent().equals(String.valueOf(id))){
-                pstudents.getChildNodes().item(i).removeChild(pstudents.getChildNodes().item(i));
-
-                Element studentElement = document.createElement("student");
-                studentElement.setAttribute("name", p.getName());
-                studentElement.setAttribute("age", String.valueOf(p.getAge()));
-                studentElement.setAttribute("street", p.getAddress().getStreet());
-                studentElement.setAttribute("city", p.getAddress().getCity());
-                studentElement.setAttribute("state", p.getAddress().getState());
-                studentElement.setAttribute("zip", p.getAddress().getZip());
-                studentElement.setAttribute("id", String.valueOf(p.getId()));
-                studentElement.setAttribute("cls", p.getCls());
-                studentElement.setAttribute("research", p.getResearch());
-                studentElement.setAttribute("tutor", p.getTutor());
-
-                Element gradesElement = document.createElement("grades");
-                p.getGrades().forEach((key, value)->{
-                    Element gradeElement = document.createElement(key);
-                    gradeElement.setAttribute("grade", value.toString());
-                });
-                studentElement.appendChild(gradesElement);
-
-                pstudents.getChildNodes().item(i).appendChild(studentElement);
-            }
-        }
+        this.removePStudent(id);
+        this.addStudent(p);
     }
 
     @Override

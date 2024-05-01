@@ -1,8 +1,11 @@
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -19,15 +22,17 @@ public class MainWindow {
     private JScrollPane PStuPane;
     private JTable UStuTable;
     private JTable PStuTable;
+    private JTextField searchField;
     private static final UStudentModel uStudentModel = new UStudentModel(new UStudent[0]);
     private static final PStudentModel pStudentModel = new PStudentModel(new PStudent[0]);
-    private static JMenuItem itemAddUStudent;
-    private static JMenuItem itemAddPStudent;
     private static JMenuItem itemDelete;
+    private static JMenu addMenu;
     public static final int windowWidth = 800;
     public static final int windowHeight = 600;
     private static int tabIndex = 0;
     private static int selectedRow = -1;
+    private static final TableRowSorter<UStudentModel> uSorter = new TableRowSorter<>(uStudentModel);
+    private static final TableRowSorter<PStudentModel> pSorter = new TableRowSorter<>(pStudentModel);
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("学生信息管理系统");
@@ -51,9 +56,10 @@ public class MainWindow {
 
     private static JMenu getEditMenu(JFrame frame) {
         JMenu editMenu = new JMenu("编辑");
-        JMenu addMenu = new JMenu("添加");
+        addMenu = new JMenu("添加");
+        addMenu.setEnabled(false);
 
-        itemDelete = new JMenuItem(new AbstractAction("删除选中项") {
+        itemDelete = new JMenuItem(new AbstractAction("删除") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (selectedRow != -1) {
@@ -75,25 +81,23 @@ public class MainWindow {
         });
         itemDelete.setEnabled(false);
 
-        itemAddUStudent = new JMenuItem(new AbstractAction("本科生") {
+        JMenuItem itemAddUStudent = new JMenuItem(new AbstractAction("本科生") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddUStudent.show(c);
+                selectedRow = -1;
                 uStudentModel.setUStudents(c.getUStudent());
-                JOptionPane.showMessageDialog(frame,"添加成功");
             }
         });
-        itemAddUStudent.setEnabled(false);
 
-        itemAddPStudent = new JMenuItem(new AbstractAction("研究生") {
+        JMenuItem itemAddPStudent = new JMenuItem(new AbstractAction("研究生") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddPStudent.show(c);
+                selectedRow = -1;
                 pStudentModel.setPStudents(c.getPStudent());
-                JOptionPane.showMessageDialog(frame,"添加成功");
             }
         });
-        itemAddPStudent.setEnabled(false);
 
         addMenu.add(itemAddUStudent);
         addMenu.add(itemAddPStudent);
@@ -122,6 +126,11 @@ public class MainWindow {
 
                 fileChooser.showSaveDialog(frame);
                 File file = fileChooser.getSelectedFile();
+                String fname = fileChooser.getName(file);
+
+                if(fname!=null && !fname.endsWith(".xml")){
+                    file=new File(fileChooser.getCurrentDirectory(),fname+".xml");
+                }
 
                 if(file != null) {
                     try {
@@ -135,9 +144,8 @@ public class MainWindow {
                     if (file.getName().endsWith(".xml")) {
                         c = new Controller(file);
                         itemSave.setEnabled(true);
-                        itemAddUStudent.setEnabled(true);
-                        itemAddPStudent.setEnabled(true);
                         itemDelete.setEnabled(true);
+                        addMenu.setEnabled(true);
                     } else {
                         JOptionPane.showMessageDialog(frame,"文件格式不正确", "错误", JOptionPane.ERROR_MESSAGE);
                     }
@@ -161,9 +169,8 @@ public class MainWindow {
                         uStudentModel.setUStudents(c.getUStudent());
                         pStudentModel.setPStudents(c.getPStudent());
                         itemSave.setEnabled(true);
-                        itemAddUStudent.setEnabled(true);
-                        itemAddPStudent.setEnabled(true);
                         itemDelete.setEnabled(true);
+                        addMenu.setEnabled(true);
                     } else {
                         JOptionPane.showMessageDialog(frame,"文件格式不正确", "错误", JOptionPane.ERROR_MESSAGE);
                     }
@@ -188,17 +195,21 @@ public class MainWindow {
     private void createUIComponents() {
         UStuTable = new JTable();
         UStuTable.setModel(uStudentModel);
+        UStuTable.setRowSorter(uSorter);
         UStuTable.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
-                    int row = UStuTable.getSelectedRow();
+                    int row = UStuTable.convertRowIndexToModel(UStuTable.getSelectedRow());
+                    EditUStudent.show(c, c.getUStudent()[row]);
+                    selectedRow = -1;
+                    uStudentModel.setUStudents(c.getUStudent());
                 }
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                selectedRow = UStuTable.getSelectedRow();
+                selectedRow = UStuTable.convertRowIndexToView(UStuTable.getSelectedRow());
             }
 
             @Override
@@ -219,17 +230,21 @@ public class MainWindow {
 
         PStuTable = new JTable();
         PStuTable.setModel(pStudentModel);
+        PStuTable.setRowSorter(pSorter);
         PStuTable.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
-                    int row = PStuTable.getSelectedRow();
+                    int row = PStuTable.convertRowIndexToModel(PStuTable.getSelectedRow());
+                    EditPStudent.show(c, c.getPStudent()[row]);
+                    selectedRow = -1;
+                    pStudentModel.setPStudents(c.getPStudent());
                 }
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                selectedRow = PStuTable.getSelectedRow();
+                selectedRow = PStuTable.convertRowIndexToView(PStuTable.getSelectedRow());
             }
 
             @Override
@@ -257,6 +272,49 @@ public class MainWindow {
                     selectedRow = UStuTable.getSelectedRow();
                 } else {
                     selectedRow = PStuTable.getSelectedRow();
+                }
+            }
+        });
+
+        searchField = new JTextField();
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                String text = searchField.getText();
+
+                if (text.trim().isEmpty()) {
+                    uSorter.setRowFilter(null);
+                    pSorter.setRowFilter(null);
+                } else {
+                    uSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                    pSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String text = searchField.getText();
+
+                if (text.trim().isEmpty()) {
+                    uSorter.setRowFilter(null);
+                    pSorter.setRowFilter(null);
+                } else {
+                    uSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                    pSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                String text = searchField.getText();
+
+                if (text.trim().isEmpty()) {
+                    uSorter.setRowFilter(null);
+                    pSorter.setRowFilter(null);
+                } else {
+                    uSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                    pSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
                 }
             }
         });
@@ -345,7 +403,7 @@ class UStudentModel extends AbstractTableModel {
                 return uStudents[rowIndex].getAddress();
             }
             case 5 -> {
-                return uStudents[rowIndex].getGrades();
+                return uStudents[rowIndex].getGradesStr();
             }
             case 6 -> {
                 return uStudents[rowIndex].getMajor();
@@ -427,7 +485,7 @@ class PStudentModel extends AbstractTableModel {
                 return pStudents[rowIndex].getAddress();
             }
             case 5 -> {
-                return pStudents[rowIndex].getGrades();
+                return pStudents[rowIndex].getGradesStr();
             }
             case 6 -> {
                 return pStudents[rowIndex].getResearch();

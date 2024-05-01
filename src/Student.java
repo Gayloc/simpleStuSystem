@@ -40,4 +40,12 @@ public abstract class Student {
     public HashMap<String, Integer> getGrades() {
         return grades;
     }
+
+    public String getGradesStr() {
+        StringBuilder sb = new StringBuilder();
+        grades.forEach((k, v) -> {
+            sb.append(k).append(":").append(v).append(";");
+        });
+        return sb.toString();
+    }
 }

@@ -11,6 +11,13 @@ public class Address {
         this.zip = zip;
     }
 
+    public Address() {
+        this.street = "";
+        this.city = "";
+        this.state = "";
+        this.zip = "";
+    }
+
     public String getStreet() {
         return street;
     }
@@ -29,6 +36,9 @@ public class Address {
 
     @Override
     public String toString() {
+        if(street.isEmpty() || city.isEmpty() || state.isEmpty() || zip.isEmpty()) {
+            return "";
+        }
         return street + " " + city + " " + state + " " + zip;
     }
 }

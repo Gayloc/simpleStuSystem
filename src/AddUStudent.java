@@ -52,8 +52,13 @@ public class AddUStudent extends JDialog {
     }
 
     private void onOK() {
+        if(NewId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(contentPane, "id 不能为空");
+            return;
+        }
+
         String[] add = NewAddress.getText().split(" ");
-        if(add.length != 4) {
+        if(add.length != 4 && !NewAddress.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "地址格式不正确");
             return;
         }
@@ -66,33 +71,40 @@ public class AddUStudent extends JDialog {
                 String[] arr = s.split(":");
                 if (arr.length != 2) {
                     JOptionPane.showMessageDialog(this, "分数格式不正确");
-                    break;
+                    return;
                 }
                 grade.put(arr[0], Integer.parseInt(arr[1]));
             }
         }
 
-        Address address = new Address(
-                add[0],
-                add[1],
-                add[2],
-                add[3]
-        );
+        Address address;
+        if(NewAddress.getText().isEmpty()) {
+            address = new Address();
+        } else {
+            address = new Address(
+                    add[0],
+                    add[1],
+                    add[2],
+                    add[3]
+            );
+        }
 
         controller.addStudent(new UStudent(
                 NewName.getText(),
-                Integer.parseInt(NewAge.getText()),
+                Integer.parseInt(NewAge.getText().isEmpty()?"0":NewAge.getText()),
                 Integer.parseInt(NewId.getText()),
                 NewCls.getText(),
                 address,
                 grade,
                 NewMajor.getText()
         ));
+
+        JOptionPane.showMessageDialog(this,"添加成功");
+
         dispose();
     }
 
     private void onCancel() {
-        // 必要时在此处添加您的代码
         dispose();
     }
 

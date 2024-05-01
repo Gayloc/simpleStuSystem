@@ -3,21 +3,21 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 
-public class AddPStudent extends JDialog {
+public class EditPStudent extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField NewId;
-    private JTextField NewName;
-    private JTextField NewResearch;
-    private JTextField NewAge;
-    private JTextField NewCls;
-    private JTextField NewAddress;
-    private JTextField NewGrade;
-    private JTextField NewTutor;
+    private JTextField editName;
+    private JTextField editAge;
+    private JTextField editCls;
+    private JTextField editAddress;
+    private JTextField editGrade;
+    private JTextField editResearch;
+    private JTextField editTutor;
     private final Controller controller;
+    private static PStudent EditStu;
 
-    public AddPStudent(Controller c) {
+    public EditPStudent(Controller c) {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -52,33 +52,28 @@ public class AddPStudent extends JDialog {
     }
 
     private void onOK() {
-        if(NewId.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(contentPane, "id 不能为空");
-            return;
-        }
-
-        String[] add = NewAddress.getText().split(" ");
-        if(add.length != 4 && !NewAddress.getText().isEmpty()) {
+        String[] add = editAddress.getText().split(" ");
+        if(add.length != 4 && !editAddress.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "地址格式不正确");
             return;
         }
 
         HashMap<String, Integer> grade = new HashMap<>();
 
-        if(!NewGrade.getText().isEmpty()) {
-            String[] Grades = NewGrade.getText().split(";");
+        if(!editGrade.getText().isEmpty()) {
+            String[] Grades = editGrade.getText().split(";");
             for (String s : Grades) {
                 String[] arr = s.split(":");
                 if (arr.length != 2) {
                     JOptionPane.showMessageDialog(this, "分数格式不正确");
-                    break;
+                    return;
                 }
                 grade.put(arr[0], Integer.parseInt(arr[1]));
             }
         }
 
         Address address;
-        if(NewAddress.getText().isEmpty()) {
+        if(editAddress.getText().isEmpty()) {
             address = new Address();
         } else {
             address = new Address(
@@ -89,19 +84,18 @@ public class AddPStudent extends JDialog {
             );
         }
 
-        controller.addStudent(new PStudent(
-                NewName.getText(),
-                Integer.parseInt(NewAge.getText().isEmpty()?"0":NewAge.getText()),
-                Integer.parseInt(NewId.getText()),
-                NewCls.getText(),
+        controller.putStudent(EditStu.getId(), new PStudent(
+                editName.getText(),
+                Integer.parseInt(editAge.getText().isEmpty()?"0":editAge.getText()),
+                EditStu.getId(),
+                editCls.getText(),
                 address,
                 grade,
-                NewResearch.getText(),
-                NewTutor.getText()
+                editResearch.getText(),
+                editTutor.getText()
         ));
 
-        JOptionPane.showMessageDialog(this,"添加成功");
-
+        JOptionPane.showMessageDialog(this,"修改成功");
         dispose();
     }
 
@@ -109,14 +103,37 @@ public class AddPStudent extends JDialog {
         dispose();
     }
 
-    public static void show(Controller c) {
-        AddPStudent dialog = new AddPStudent(c);
-        dialog.setTitle("添加研究生");
+    public static void show(Controller c, PStudent editStu) {
+        EditStu = editStu;
+        EditPStudent dialog = new EditPStudent(c);
         dialog.pack();
         Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) screensize.getWidth() / 2 - dialog.getWidth()/2;
         int y = (int) screensize.getHeight() / 2 - dialog.getHeight()/2;
         dialog.setLocation(x, y);
+        dialog.setTitle("编辑学生信息");
         dialog.setVisible(true);
+    }
+
+    private void createUIComponents() {
+        editName = new JTextField();
+        editAge = new JTextField();
+        editCls = new JTextField();
+        editAddress = new JTextField();
+        editGrade = new JTextField();
+        editResearch = new JTextField();
+        editTutor = new JTextField();
+
+        if(EditStu != null) {
+            editName.setText(EditStu.getName());
+            editAge.setText(String.valueOf(EditStu.getAge()));
+            editCls.setText(EditStu.getCls());
+            editGrade.setText(EditStu.getGradesStr());
+            editResearch.setText(EditStu.getResearch());
+            editTutor.setText(EditStu.getTutor());
+            editAddress.setText(EditStu.getAddress().toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "编辑对象不存在", "错误", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
