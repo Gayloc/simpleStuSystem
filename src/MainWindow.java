@@ -1,6 +1,4 @@
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
@@ -26,6 +24,7 @@ public class MainWindow {
     private static final UStudentModel uStudentModel = new UStudentModel(new UStudent[0]);
     private static final PStudentModel pStudentModel = new PStudentModel(new PStudent[0]);
     private static JMenuItem itemDelete;
+    private static JMenuItem itemEdit;
     private static JMenu addMenu;
     public static final int windowWidth = 800;
     public static final int windowHeight = 600;
@@ -67,11 +66,13 @@ public class MainWindow {
                         if(JOptionPane.showConfirmDialog(frame,"确定删除？","删除确定", JOptionPane.YES_NO_OPTION)==0) {
                             c.removeUStudent(c.getUStudent()[selectedRow].getId());
                             uStudentModel.setUStudents(c.getUStudent());
+                            selectedRow = -1;
                         }
                     } else if (tabIndex == 1) {
                         if(JOptionPane.showConfirmDialog(frame,"确定删除？","删除确定", JOptionPane.YES_NO_OPTION)==0) {
                             c.removePStudent(c.getPStudent()[selectedRow].getId());
                             pStudentModel.setPStudents(c.getPStudent());
+                            selectedRow = -1;
                         }
                     }
                 } else {
@@ -80,6 +81,26 @@ public class MainWindow {
             }
         });
         itemDelete.setEnabled(false);
+
+        itemEdit = new JMenuItem(new AbstractAction("修改") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectedRow != -1) {
+                    if (tabIndex == 0) {
+                        EditUStudent.show(c, c.getUStudent()[selectedRow]);
+                        selectedRow = -1;
+                        uStudentModel.setUStudents(c.getUStudent());
+                    } else if (tabIndex == 1) {
+                        EditPStudent.show(c, c.getPStudent()[selectedRow]);
+                        selectedRow = -1;
+                        pStudentModel.setPStudents(c.getPStudent());
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame, "没有选中项", "错误", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        itemEdit.setEnabled(false);
 
         JMenuItem itemAddUStudent = new JMenuItem(new AbstractAction("本科生") {
             @Override
@@ -103,6 +124,7 @@ public class MainWindow {
         addMenu.add(itemAddPStudent);
         editMenu.add(addMenu);
         editMenu.add(itemDelete);
+        editMenu.add(itemEdit);
         return editMenu;
     }
 
@@ -146,6 +168,7 @@ public class MainWindow {
                         itemSave.setEnabled(true);
                         itemDelete.setEnabled(true);
                         addMenu.setEnabled(true);
+                        itemEdit.setEnabled(true);
                     } else {
                         JOptionPane.showMessageDialog(frame,"文件格式不正确", "错误", JOptionPane.ERROR_MESSAGE);
                     }
@@ -171,6 +194,7 @@ public class MainWindow {
                         itemSave.setEnabled(true);
                         itemDelete.setEnabled(true);
                         addMenu.setEnabled(true);
+                        itemEdit.setEnabled(true);
                     } else {
                         JOptionPane.showMessageDialog(frame,"文件格式不正确", "错误", JOptionPane.ERROR_MESSAGE);
                     }
@@ -264,15 +288,12 @@ public class MainWindow {
         });
 
         tabbedPane = new JTabbedPane();
-        tabbedPane.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                tabIndex = tabbedPane.getSelectedIndex();
-                if(tabIndex == 0) {
-                    selectedRow = UStuTable.getSelectedRow();
-                } else {
-                    selectedRow = PStuTable.getSelectedRow();
-                }
+        tabbedPane.addChangeListener(e -> {
+            tabIndex = tabbedPane.getSelectedIndex();
+            if(tabIndex == 0) {
+                selectedRow = UStuTable.getSelectedRow();
+            } else {
+                selectedRow = PStuTable.getSelectedRow();
             }
         });
 
