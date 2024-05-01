@@ -31,14 +31,19 @@ public class searchDialog extends JDialog {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(searchField.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(contentPane, "wrong", "error search", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(contentPane, "请输入查找内容", "错误", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 switch (selection) {
                     case 0 -> {
-                        uStudents = controller.getUStudentByID(Integer.parseInt(searchField.getText()));
-                        pStudents = controller.getPStudentByID(Integer.parseInt(searchField.getText()));
+                        if(searchField.getText().matches("[0-9]+")) {
+                            uStudents = controller.getUStudentByID(Integer.parseInt(searchField.getText()));
+                            pStudents = controller.getPStudentByID(Integer.parseInt(searchField.getText()));
+                        } else {
+                            JOptionPane.showMessageDialog(contentPane, "id 格式不正确", "错误", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
                     }
                     case 1 -> {
                         uStudents = controller.getUStudentByName(searchField.getText());
@@ -53,7 +58,7 @@ public class searchDialog extends JDialog {
                 uStudentModel.setUStudents(uStudents);
                 pStudentModel.setPStudents(pStudents);
 
-                JOptionPane.showMessageDialog(contentPane,"success");
+                JOptionPane.showMessageDialog(contentPane,"成功查找到本科生信息"+uStudents.length+"条，研究生信息"+pStudents.length+"条");
             }
         });
 

@@ -121,7 +121,7 @@ public class MainWindow {
             }
         });
 
-        itemSearch = new JMenuItem(new AbstractAction("search...") {
+        itemSearch = new JMenuItem(new AbstractAction("查找…") {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 searchDialog.show(c);
@@ -156,8 +156,14 @@ public class MainWindow {
 
                 fileChooser.setFileFilter(new xmlFileFilter());
 
-                fileChooser.showSaveDialog(frame);
+                int choice = fileChooser.showSaveDialog(frame);
+
+                if (choice != JFileChooser.APPROVE_OPTION) {
+                    return;
+                }
+
                 File file = fileChooser.getSelectedFile();
+
                 String fname = fileChooser.getName(file);
 
                 if(fname!=null && !fname.endsWith(".xml")){
@@ -194,7 +200,11 @@ public class MainWindow {
 
                 fileChooser.setFileFilter(new xmlFileFilter());
 
-                fileChooser.showOpenDialog(frame);
+                int choice = fileChooser.showOpenDialog(frame);
+                if (choice != JFileChooser.APPROVE_OPTION) {
+                    return;
+                }
+
                 File file = fileChooser.getSelectedFile();
 
                 if(file!=null) {
