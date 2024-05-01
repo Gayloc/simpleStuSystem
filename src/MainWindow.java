@@ -275,7 +275,7 @@ public class MainWindow {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                selectedRow = UStuTable.convertRowIndexToView(UStuTable.getSelectedRow());
+                selectedRow = UStuTable.convertRowIndexToModel(UStuTable.getSelectedRow());
             }
 
             @Override
@@ -310,7 +310,7 @@ public class MainWindow {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                selectedRow = PStuTable.convertRowIndexToView(PStuTable.getSelectedRow());
+                selectedRow = PStuTable.convertRowIndexToModel(PStuTable.getSelectedRow());
             }
 
             @Override

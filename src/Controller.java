@@ -90,7 +90,7 @@ public class Controller implements SISystem {
             root.getElementsByTagName("UStudent").item(0).appendChild(studentElement);
         }
 
-        uStuNum++;
+        uStuNum=getUStudent().length;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class Controller implements SISystem {
             root.getElementsByTagName("PStudent").item(0).appendChild(studentElement);
         }
 
-        pStuNum++;
+        pStuNum=getPStudent().length;
     }
 
     @Override
@@ -141,7 +141,7 @@ public class Controller implements SISystem {
             }
         }
 
-        uStuNum--;
+        uStuNum=getUStudent().length;
     }
 
     @Override
@@ -155,7 +155,7 @@ public class Controller implements SISystem {
             }
         }
 
-        pStuNum--;
+        pStuNum=getPStudent().length;
     }
 
     @Override

@@ -11,7 +11,7 @@ public class Test {
             c.addStudent(new UStudent(
                     "name"+i,
                     14,
-                    13,
+                    i,
                     "dasdsa",
                     new Address(
                             "fafds",
