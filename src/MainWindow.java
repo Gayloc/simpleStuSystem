@@ -25,6 +25,7 @@ public class MainWindow {
     private static final PStudentModel pStudentModel = new PStudentModel(new PStudent[0]);
     private static JMenuItem itemDelete;
     private static JMenuItem itemEdit;
+    private static JMenuItem itemSearch;
     private static JMenu addMenu;
     public static final int windowWidth = 800;
     public static final int windowHeight = 600;
@@ -120,11 +121,20 @@ public class MainWindow {
             }
         });
 
+        itemSearch = new JMenuItem(new AbstractAction("search...") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                searchDialog.show(c);
+            }
+        });
+        itemSearch.setEnabled(false);
+
         addMenu.add(itemAddUStudent);
         addMenu.add(itemAddPStudent);
         editMenu.add(addMenu);
         editMenu.add(itemDelete);
         editMenu.add(itemEdit);
+        editMenu.add(itemSearch);
         return editMenu;
     }
 
@@ -169,6 +179,7 @@ public class MainWindow {
                         itemDelete.setEnabled(true);
                         addMenu.setEnabled(true);
                         itemEdit.setEnabled(true);
+                        itemSearch.setEnabled(true);
                     } else {
                         JOptionPane.showMessageDialog(frame,"文件格式不正确", "错误", JOptionPane.ERROR_MESSAGE);
                     }
@@ -195,6 +206,7 @@ public class MainWindow {
                         itemDelete.setEnabled(true);
                         addMenu.setEnabled(true);
                         itemEdit.setEnabled(true);
+                        itemSearch.setEnabled(true);
                     } else {
                         JOptionPane.showMessageDialog(frame,"文件格式不正确", "错误", JOptionPane.ERROR_MESSAGE);
                     }
