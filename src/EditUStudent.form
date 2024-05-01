@@ -87,7 +87,9 @@
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <toolTipText value="格式：省 市 街 门牌号， 用空格隔开"/>
+            </properties>
           </component>
           <component id="658c0" class="javax.swing.JTextField" binding="editGrade" custom-create="true">
             <constraints>
@@ -95,7 +97,9 @@
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <toolTipText value="科目和分数用 : 隔开，每一组科目与分数之间用 ; 隔开"/>
+            </properties>
           </component>
           <component id="ff067" class="javax.swing.JTextField" binding="editMajor" custom-create="true">
             <constraints>

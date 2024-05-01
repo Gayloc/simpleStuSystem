@@ -374,7 +374,7 @@ class UStudentModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 7;
+        return 8;
     }
 
     @Override
@@ -400,6 +400,9 @@ class UStudentModel extends AbstractTableModel {
             }
             case 6 -> {
                 return "专业";
+            }
+            case 7 -> {
+                return "总成绩";
             }
         }
         return "";
@@ -429,6 +432,9 @@ class UStudentModel extends AbstractTableModel {
             case 6 -> {
                 return uStudents[rowIndex].getMajor();
             }
+            case 7 -> {
+                return uStudents[rowIndex].getTotalGrades();
+            }
         }
         return null;
     }
@@ -453,7 +459,7 @@ class PStudentModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 8;
+        return 9;
     }
 
     @Override
@@ -482,6 +488,9 @@ class PStudentModel extends AbstractTableModel {
             }
             case 7 -> {
                 return "导师";
+            }
+            case 8 -> {
+                return "总成绩";
             }
         }
         return "";
@@ -513,6 +522,9 @@ class PStudentModel extends AbstractTableModel {
             }
             case 7 -> {
                 return pStudents[rowIndex].getTutor();
+            }
+            case 8 -> {
+                return pStudents[rowIndex].getTotalGrades();
             }
         }
         return null;

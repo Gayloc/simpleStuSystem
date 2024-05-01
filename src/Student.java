@@ -48,4 +48,8 @@ public abstract class Student {
         });
         return sb.toString();
     }
+
+    public int getTotalGrades() {
+        return grades.values().stream().mapToInt(v -> v).sum();
+    }
 }
