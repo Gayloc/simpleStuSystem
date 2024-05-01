@@ -7,20 +7,22 @@ public class Test {
         HashMap<String, Integer> grades = new HashMap<>();
         grades.put("A", 1);
 
-        c.addStudent(new UStudent(
-                "name",
-                14,
-                13,
-                "dasdsa",
-                new Address(
-                        "fafds",
-                        "dfasdsa",
-                        "sfasf",
-                        "fgasfsa"
-                ),
-                grades,
-                "fasfasf"
-        ));
+        for(int i=0;i<50;i++) {
+            c.addStudent(new UStudent(
+                    "name"+i,
+                    14,
+                    13,
+                    "dasdsa",
+                    new Address(
+                            "fafds",
+                            "dfasdsa",
+                            "sfasf",
+                            "fgasfsa"
+                    ),
+                    grades,
+                    "fasfasf"
+            ));
+        }
         c.save();
     }
 }

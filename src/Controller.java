@@ -22,6 +22,9 @@ public class Controller implements SISystem {
     private final Element root;
     private final File f;
 
+    private int pStuNum;
+    private int uStuNum;
+
     Controller(File file) {
         try {
             f=file;
@@ -29,6 +32,8 @@ public class Controller implements SISystem {
             DocumentBuilder db = dbf.newDocumentBuilder();
             document = db.parse(f);
             root = document.getDocumentElement();
+            pStuNum=getPStudent().length;
+            uStuNum=getUStudent().length;
         } catch (ParserConfigurationException | IOException | SAXException e) {
             throw new RuntimeException(e);
         }
@@ -84,6 +89,8 @@ public class Controller implements SISystem {
         } else {
             root.getElementsByTagName("UStudent").item(0).appendChild(studentElement);
         }
+
+        uStuNum++;
     }
 
     @Override
@@ -120,6 +127,8 @@ public class Controller implements SISystem {
         } else {
             root.getElementsByTagName("PStudent").item(0).appendChild(studentElement);
         }
+
+        pStuNum++;
     }
 
     @Override
@@ -131,6 +140,8 @@ public class Controller implements SISystem {
                 i--;
             }
         }
+
+        uStuNum--;
     }
 
     @Override
@@ -143,6 +154,8 @@ public class Controller implements SISystem {
                 i--;
             }
         }
+
+        pStuNum--;
     }
 
     @Override
@@ -327,5 +340,13 @@ public class Controller implements SISystem {
                 node.getAttributes().getNamedItem("research").getTextContent(),
                 node.getAttributes().getNamedItem("tutor").getTextContent()
         );
+    }
+
+    public int getpStuNum() {
+        return pStuNum;
+    }
+
+    public int getuStuNum() {
+        return uStuNum;
     }
 }

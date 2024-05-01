@@ -42,6 +42,7 @@ public class MainWindow {
 
         menuBar.add(getFileMenu(frame));
         menuBar.add(getEditMenu(frame));
+        menuBar.add(getOtherMenu(frame));
 
         Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) screensize.getWidth() / 2 - windowWidth/2;
@@ -52,6 +53,24 @@ public class MainWindow {
         frame.setContentPane(new MainWindow().mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+    }
+
+    private static JMenu getOtherMenu(JFrame frame) {
+        JMenu otherMenu = new JMenu("其他");
+        JMenuItem itemNum = new JMenuItem(new AbstractAction("统计…") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (c == null) {
+                   JOptionPane.showMessageDialog(frame, "未打开文件", "错误", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    int us = c.getuStuNum();
+                    int ps = c.getpStuNum();
+                    JOptionPane.showMessageDialog(frame, "共有本科生"+us+"人，研究生"+ps+"人，共"+(us+ps)+"人");
+                }
+            }
+        });
+        otherMenu.add(itemNum);
+        return otherMenu;
     }
 
     private static JMenu getEditMenu(JFrame frame) {
@@ -145,6 +164,7 @@ public class MainWindow {
             @Override
             public void actionPerformed(ActionEvent e) {
                 c.save();
+                JOptionPane.showMessageDialog(frame, "保存成功");
             }
         });
         itemSave.setEnabled(false);

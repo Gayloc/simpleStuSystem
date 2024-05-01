@@ -89,6 +89,7 @@ public class searchDialog extends JDialog {
         int x = (int) screensize.getWidth() / 2 - dialog.getWidth()/2;
         int y = (int) screensize.getHeight() / 2 - dialog.getHeight()/2;
         dialog.setLocation(x, y);
+        dialog.setTitle("查找学生信息");
         dialog.setVisible(true);
     }
 
