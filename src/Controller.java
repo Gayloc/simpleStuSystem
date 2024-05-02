@@ -33,8 +33,8 @@ public class Controller implements SISystem {
             DocumentBuilder db = dbf.newDocumentBuilder();
             document = db.parse(f);
             root = document.getDocumentElement();
-            pStuNum=getPStudent().length;
-            uStuNum=getUStudent().length;
+            pStuNum=getPStudent()==null?0:getPStudent().length;
+            uStuNum=getUStudent()==null?0:getUStudent().length;
         } catch (ParserConfigurationException | IOException | SAXException e) {
             throw new RuntimeException(e);
         }

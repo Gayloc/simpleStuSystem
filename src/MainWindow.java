@@ -252,6 +252,8 @@ public class MainWindow {
 
                     if (file.getName().endsWith(".xml")) {
                         c = new Controller(file);
+                        uStudentModel.setUStudents(c.getUStudent());
+                        pStudentModel.setPStudents(c.getPStudent());
                         itemSave.setEnabled(true);
                         itemDelete.setEnabled(true);
                         addMenu.setEnabled(true);
