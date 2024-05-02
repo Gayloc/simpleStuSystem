@@ -105,6 +105,7 @@ public class EditUStudent extends JDialog {
         EditStu = editStu;
         EditUStudent dialog = new EditUStudent(c);
         dialog.pack();
+        dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) screensize.getWidth() / 2 - dialog.getWidth()/2;
         int y = (int) screensize.getHeight() / 2 - dialog.getHeight()/2;

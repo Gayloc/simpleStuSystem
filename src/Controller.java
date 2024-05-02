@@ -24,6 +24,7 @@ public class Controller implements SISystem {
 
     private int pStuNum;
     private int uStuNum;
+    public static final int MAX_STU_NUM = 100;
 
     Controller(File file) {
         try {
@@ -51,10 +52,6 @@ public class Controller implements SISystem {
         } catch (TransformerException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public Document getDocument() {
-        return document;
     }
 
     @Override

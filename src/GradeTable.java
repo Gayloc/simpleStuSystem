@@ -63,6 +63,7 @@ public class GradeTable extends JDialog {
         int y = (int) screensize.getHeight() / 2 - dialog.getHeight()/2;
         dialog.setLocation(x, y);
         dialog.setTitle("成绩表");
+        dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         dialog.setVisible(true);
     }
 

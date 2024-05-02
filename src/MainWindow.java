@@ -43,6 +43,7 @@ public class MainWindow {
         menuBar.add(getFileMenu(frame));
         menuBar.add(getEditMenu(frame));
         menuBar.add(getOtherMenu(frame));
+        menuBar.add(getHelpMenu(frame));
 
         Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) screensize.getWidth() / 2 - windowWidth/2;
@@ -53,6 +54,22 @@ public class MainWindow {
         frame.setContentPane(new MainWindow().mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+    }
+
+    private static JMenu getHelpMenu(Frame frame) {
+        JMenu helpMenu = new JMenu("帮助");
+        helpMenu.setMnemonic(KeyEvent.VK_H);
+
+        JMenuItem itemAbout = new JMenuItem(new AbstractAction("关于") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                About.showAbout();
+            }
+        });
+        itemAbout.setAccelerator(KeyStroke.getKeyStroke("control A"));
+
+        helpMenu.add(itemAbout);
+        return helpMenu;
     }
 
     private static JMenu getOtherMenu(JFrame frame) {
@@ -142,6 +159,11 @@ public class MainWindow {
         JMenuItem itemAddUStudent = new JMenuItem(new AbstractAction("本科生") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (c.getuStuNum() >= Controller.MAX_STU_NUM) {
+                    JOptionPane.showMessageDialog(frame, "达到学生数量上限，添加更多学生请开通 vip");
+                    return;
+                }
+
                 AddUStudent.show(c);
                 selectedRow = -1;
                 uStudentModel.setUStudents(c.getUStudent());
@@ -152,6 +174,11 @@ public class MainWindow {
         JMenuItem itemAddPStudent = new JMenuItem(new AbstractAction("研究生") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (c.getpStuNum() >= Controller.MAX_STU_NUM) {
+                    JOptionPane.showMessageDialog(frame, "达到学生数量上限，添加更多学生请开通 vip");
+                    return;
+                }
+
                 AddPStudent.show(c);
                 selectedRow = -1;
                 pStudentModel.setPStudents(c.getPStudent());
