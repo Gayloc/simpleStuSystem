@@ -57,6 +57,7 @@ public class MainWindow {
 
     private static JMenu getOtherMenu(JFrame frame) {
         JMenu otherMenu = new JMenu("其他");
+        otherMenu.setMnemonic(KeyEvent.VK_O);
         JMenuItem itemNum = new JMenuItem(new AbstractAction("统计…") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -69,12 +70,26 @@ public class MainWindow {
                 }
             }
         });
+
+        JMenuItem itemGradeTable = new JMenuItem(new AbstractAction("成绩表…") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (c == null) {
+                    JOptionPane.showMessageDialog(frame, "未打开文件", "错误", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    GradeTable.show(c);
+                }
+            }
+        });
+
         otherMenu.add(itemNum);
+        otherMenu.add(itemGradeTable);
         return otherMenu;
     }
 
     private static JMenu getEditMenu(JFrame frame) {
         JMenu editMenu = new JMenu("编辑");
+        editMenu.setMnemonic(KeyEvent.VK_E);
         addMenu = new JMenu("添加");
         addMenu.setEnabled(false);
 
@@ -101,6 +116,7 @@ public class MainWindow {
             }
         });
         itemDelete.setEnabled(false);
+        itemDelete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
 
         itemEdit = new JMenuItem(new AbstractAction("修改") {
             @Override
@@ -121,6 +137,7 @@ public class MainWindow {
             }
         });
         itemEdit.setEnabled(false);
+        itemEdit.setAccelerator(KeyStroke.getKeyStroke("control E"));
 
         JMenuItem itemAddUStudent = new JMenuItem(new AbstractAction("本科生") {
             @Override
@@ -130,6 +147,7 @@ public class MainWindow {
                 uStudentModel.setUStudents(c.getUStudent());
             }
         });
+        itemAddUStudent.setAccelerator(KeyStroke.getKeyStroke("control U"));
 
         JMenuItem itemAddPStudent = new JMenuItem(new AbstractAction("研究生") {
             @Override
@@ -139,6 +157,7 @@ public class MainWindow {
                 pStudentModel.setPStudents(c.getPStudent());
             }
         });
+        itemAddPStudent.setAccelerator(KeyStroke.getKeyStroke("control P"));
 
         itemSearch = new JMenuItem(new AbstractAction("查找…") {
             @Override
@@ -147,6 +166,7 @@ public class MainWindow {
             }
         });
         itemSearch.setEnabled(false);
+        itemSearch.setAccelerator(KeyStroke.getKeyStroke("control F"));
 
         addMenu.add(itemAddUStudent);
         addMenu.add(itemAddPStudent);
@@ -159,6 +179,7 @@ public class MainWindow {
 
     private static JMenu getFileMenu(JFrame frame) {
         JMenu fileMenu = new JMenu("文件");
+        fileMenu.setMnemonic(KeyEvent.VK_F);
 
         JMenuItem itemSave = new JMenuItem(new AbstractAction("保存") {
             @Override
@@ -168,6 +189,7 @@ public class MainWindow {
             }
         });
         itemSave.setEnabled(false);
+        itemSave.setAccelerator(KeyStroke.getKeyStroke("control S"));
 
         JMenuItem itemNew = new JMenuItem(new AbstractAction("新建…") {
             @Override
@@ -212,6 +234,7 @@ public class MainWindow {
                 }
             }
         });
+        itemNew.setAccelerator(KeyStroke.getKeyStroke("control N"));
 
         JMenuItem itemOpen = new JMenuItem(new AbstractAction("打开…") {
             @Override
@@ -243,6 +266,7 @@ public class MainWindow {
                 }
             }
         });
+        itemOpen.setAccelerator(KeyStroke.getKeyStroke("control O"));
 
         JMenuItem itemExit = new JMenuItem(new AbstractAction("退出") {
             @Override
@@ -250,6 +274,7 @@ public class MainWindow {
                 frame.dispose();
             }
         });
+        itemExit.setAccelerator(KeyStroke.getKeyStroke("control X"));
 
         fileMenu.add(itemNew);
         fileMenu.add(itemOpen);
@@ -262,9 +287,28 @@ public class MainWindow {
         UStuTable = new JTable();
         UStuTable.setModel(uStudentModel);
         UStuTable.setRowSorter(uSorter);
+        UStuTable.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (e.getKeyChar() == KeyEvent.VK_DOWN || e.getKeyChar() == KeyEvent.VK_UP) {
+                    selectedRow = UStuTable.convertRowIndexToModel(UStuTable.getSelectedRow());
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
         UStuTable.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                selectedRow = UStuTable.convertRowIndexToModel(UStuTable.getSelectedRow());
                 if(e.getClickCount() == 2) {
                     int row = UStuTable.convertRowIndexToModel(UStuTable.getSelectedRow());
                     EditUStudent.show(c, c.getUStudent()[row]);
@@ -275,7 +319,6 @@ public class MainWindow {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                selectedRow = UStuTable.convertRowIndexToModel(UStuTable.getSelectedRow());
             }
 
             @Override
@@ -297,6 +340,25 @@ public class MainWindow {
         PStuTable = new JTable();
         PStuTable.setModel(pStudentModel);
         PStuTable.setRowSorter(pSorter);
+        PStuTable.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (e.getKeyChar() == KeyEvent.VK_DOWN || e.getKeyChar() == KeyEvent.VK_UP) {
+                    selectedRow = PStuTable.convertRowIndexToModel(PStuTable.getSelectedRow());
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
         PStuTable.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -333,9 +395,13 @@ public class MainWindow {
         tabbedPane.addChangeListener(e -> {
             tabIndex = tabbedPane.getSelectedIndex();
             if(tabIndex == 0) {
-                selectedRow = UStuTable.getSelectedRow();
+                if(UStuTable.getSelectedRow()!=-1) {
+                    selectedRow = UStuTable.convertRowIndexToModel(UStuTable.getSelectedRow());
+                }
             } else {
-                selectedRow = PStuTable.getSelectedRow();
+                if(PStuTable.getSelectedRow()!=-1) {
+                    selectedRow = PStuTable.convertRowIndexToModel(PStuTable.getSelectedRow());
+                }
             }
         });
 
@@ -451,6 +517,19 @@ class UStudentModel extends AbstractTableModel {
     }
 
     @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        switch (columnIndex) {
+            case 0, 2, 7 -> {
+                return Integer.class;
+            }
+            case 1, 3, 4, 5, 6 -> {
+                return String.class;
+            }
+        }
+        return String.class;
+    }
+
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0 -> {
@@ -536,6 +615,19 @@ class PStudentModel extends AbstractTableModel {
             }
         }
         return "";
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        switch (columnIndex) {
+            case 0, 2, 8 -> {
+                return Integer.class;
+            }
+            case 1, 3, 4, 5, 6, 7 -> {
+                return String.class;
+            }
+        }
+        return String.class;
     }
 
     @Override
