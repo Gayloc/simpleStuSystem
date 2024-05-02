@@ -9,6 +9,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Objects;
 
 public class MainWindow {
     private static Controller c;
@@ -36,6 +37,7 @@ public class MainWindow {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("学生信息管理系统");
+        frame.setIconImage(new ImageIcon(Objects.requireNonNull(MainWindow.class.getResource("SISystem.png"))).getImage());
 
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
