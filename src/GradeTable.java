@@ -9,19 +9,15 @@ public class GradeTable extends JDialog {
     private JTabbedPane tabbedPane1;
     private JTable UTable;
     private JTable PTable;
-    private final Controller controller;
-    private ArrayList<String> uSubjects = new ArrayList<>();
-    private ArrayList<String> pSubjects = new ArrayList<>();
-    private final UTableModel UTableModel = new UTableModel();
-    private final PTableModel PTableModel = new PTableModel();
+    private final ArrayList<String> uSubjects = new ArrayList<>();
+    private final ArrayList<String> pSubjects = new ArrayList<>();
 
     public GradeTable(Controller c) {
         setContentPane(contentPane);
         setModal(true);
-        controller = c;
 
-        UStudent[] uStudents = controller.getUStudent();
-        PStudent[] pStudents = controller.getPStudent();
+        UStudent[] uStudents = c.getUStudent();
+        PStudent[] pStudents = c.getPStudent();
 
         for (UStudent uStudent : uStudents) {
             Set<String> set = uStudent.getGrades().keySet();
@@ -51,7 +47,9 @@ public class GradeTable extends JDialog {
             psArr[i] = pSubjects.get(i);
         }
 
+        UTableModel UTableModel = new UTableModel();
         UTableModel.setData(c.getUStudent(), usArr);
+        PTableModel PTableModel = new PTableModel();
         PTableModel.setData(c.getPStudent(), psArr);
         UTable.setModel(UTableModel);
         PTable.setModel(PTableModel);
