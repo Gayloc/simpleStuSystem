@@ -92,7 +92,7 @@ public class AddPStudent extends JDialog {
         controller.addStudent(new PStudent(
                 NewName.getText(),
                 Integer.parseInt(NewAge.getText().isEmpty()?"0":NewAge.getText()),
-                Integer.parseInt(NewId.getText()),
+                NewId.getText(),
                 NewCls.getText(),
                 address,
                 grade,

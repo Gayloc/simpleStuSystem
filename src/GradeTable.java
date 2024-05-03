@@ -123,7 +123,7 @@ class UTableModel extends AbstractTableModel {
     @Override
     public Class<?> getColumnClass(int column) {
         if(column == 0) {
-            return Integer.class;
+            return String.class;
         } else if(column == 1) {
             return String.class;
         } else if(column == subjects.length+2) {
@@ -182,7 +182,7 @@ class PTableModel extends AbstractTableModel {
     @Override
     public Class<?> getColumnClass(int column) {
         if(column == 0) {
-            return Integer.class;
+            return String.class;
         } else if(column == 1) {
             return String.class;
         } else if(column == subjects.length+2) {

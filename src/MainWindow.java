@@ -550,10 +550,10 @@ class UStudentModel extends AbstractTableModel {
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         switch (columnIndex) {
-            case 0, 2, 7 -> {
+            case 2, 7 -> {
                 return Integer.class;
             }
-            case 1, 3, 4, 5, 6 -> {
+            case 0, 1, 3, 4, 5, 6 -> {
                 return String.class;
             }
         }
@@ -651,10 +651,10 @@ class PStudentModel extends AbstractTableModel {
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         switch (columnIndex) {
-            case 0, 2, 8 -> {
+            case 2, 8 -> {
                 return Integer.class;
             }
-            case 1, 3, 4, 5, 6, 7 -> {
+            case 0, 1, 3, 4, 5, 6, 7 -> {
                 return String.class;
             }
         }

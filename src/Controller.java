@@ -129,7 +129,7 @@ public class Controller implements SISystem {
     }
 
     @Override
-    public void removeUStudent(int id) {
+    public void removeUStudent(String id) {
         Node ustudents = root.getElementsByTagName("UStudent").item(0);
         for(int i=0; i<ustudents.getChildNodes().getLength(); i++) {
             if(ustudents.getChildNodes().item(i).getAttributes().getNamedItem("id").getTextContent().equals(String.valueOf(id))){
@@ -142,7 +142,7 @@ public class Controller implements SISystem {
     }
 
     @Override
-    public void removePStudent(int id) {
+    public void removePStudent(String id) {
         Node pstudents = root.getElementsByTagName("PStudent").item(0);
         for(int i = 0; i< pstudents.getChildNodes().getLength(); i++) {
             String idddd = pstudents.getChildNodes().item(i).getAttributes().getNamedItem("id").getTextContent();
@@ -156,19 +156,19 @@ public class Controller implements SISystem {
     }
 
     @Override
-    public void putStudent(int id, UStudent u) {
+    public void putStudent(String id, UStudent u) {
         this.removeUStudent(id);
         this.addStudent(u);
     }
 
     @Override
-    public void putStudent(int id, PStudent p) {
+    public void putStudent(String id, PStudent p) {
         this.removePStudent(id);
         this.addStudent(p);
     }
 
     @Override
-    public UStudent[] getUStudentByID(int id) {
+    public UStudent[] getUStudentByID(String id) {
         Node ustudents = root.getElementsByTagName("UStudent").item(0);
         ArrayList<UStudent> students = new ArrayList<>();
         if(ustudents==null) {
@@ -216,7 +216,7 @@ public class Controller implements SISystem {
     }
 
     @Override
-    public PStudent[] getPStudentByID(int id) {
+    public PStudent[] getPStudentByID(String id) {
         Node pstudents = root.getElementsByTagName("PStudent").item(0);
         ArrayList<PStudent> students = new ArrayList<>();
         if(pstudents==null) {
@@ -303,7 +303,7 @@ public class Controller implements SISystem {
         return new UStudent(
                 node.getAttributes().getNamedItem("name").getTextContent(),
                 Integer.parseInt(node.getAttributes().getNamedItem("age").getTextContent()),
-                Integer.parseInt(node.getAttributes().getNamedItem("id").getTextContent()),
+                node.getAttributes().getNamedItem("id").getTextContent(),
                 node.getAttributes().getNamedItem("cls").getTextContent(),
                 new Address(
                         node.getAttributes().getNamedItem("street").getTextContent(),
@@ -327,7 +327,7 @@ public class Controller implements SISystem {
         return new PStudent(
                 node.getAttributes().getNamedItem("name").getTextContent(),
                 Integer.parseInt(node.getAttributes().getNamedItem("age").getTextContent()),
-                Integer.parseInt(node.getAttributes().getNamedItem("id").getTextContent()),
+                node.getAttributes().getNamedItem("id").getTextContent(),
                 node.getAttributes().getNamedItem("cls").getTextContent(),
                 new Address(
                         node.getAttributes().getNamedItem("street").getTextContent(),

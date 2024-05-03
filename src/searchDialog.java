@@ -37,13 +37,9 @@ public class searchDialog extends JDialog {
 
                 switch (selection) {
                     case 0 -> {
-                        if(searchField.getText().matches("[0-9]+")) {
-                            uStudents = controller.getUStudentByID(Integer.parseInt(searchField.getText()));
-                            pStudents = controller.getPStudentByID(Integer.parseInt(searchField.getText()));
-                        } else {
-                            JOptionPane.showMessageDialog(contentPane, "id 格式不正确", "错误", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
+                        uStudents = controller.getUStudentByID(searchField.getText());
+                        pStudents = controller.getPStudentByID(searchField.getText());
+
                     }
                     case 1 -> {
                         uStudents = controller.getUStudentByName(searchField.getText());

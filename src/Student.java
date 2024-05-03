@@ -3,12 +3,12 @@ import java.util.HashMap;
 public abstract class Student {
     private final String name;
     private final int age;
-    private final int id;
+    private final String id;
     private final String cls;
     private final Address address;
     private final HashMap<String, Integer> grades;
 
-    public Student(String name, int age, int id, String cls, Address address, HashMap<String, Integer> grades) {
+    public Student(String name, int age, String id, String cls, Address address, HashMap<String, Integer> grades) {
         this.name = name;
         this.age = age;
         this.id = id;
@@ -21,7 +21,7 @@ public abstract class Student {
         return name;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
