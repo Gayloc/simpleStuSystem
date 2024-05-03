@@ -263,6 +263,7 @@ public class Controller implements SISystem {
         return students.toArray(new PStudent[0]);
     }
 
+    @Override
     public UStudent[] getUStudent() {
         Node ustudents = root.getElementsByTagName("UStudent").item(0);
         ArrayList<UStudent> students = new ArrayList<>();
@@ -276,6 +277,7 @@ public class Controller implements SISystem {
         return students.toArray(new UStudent[0]);
     }
 
+    @Override
     public PStudent[] getPStudent() {
         Node pstudents = root.getElementsByTagName("PStudent").item(0);
         ArrayList<PStudent> students = new ArrayList<>();

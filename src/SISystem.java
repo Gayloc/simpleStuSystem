@@ -11,4 +11,6 @@ public interface SISystem {
     PStudent[] getPStudentByID(int id);
     PStudent[] getPStudentByName(String str);
     PStudent[] getPStudentByCLS(String str);
+    UStudent[] getUStudent();
+    PStudent[] getPStudent();
 }
